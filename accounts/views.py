@@ -59,3 +59,7 @@ class VerifyOtpCodeView(View):
                 return redirect('home:home')
             return render(request,self.temp,{'form':form})
         return render(request,self.temp,{'form':form})
+    
+
+
+#hjfdgvrtfgvbuujt
