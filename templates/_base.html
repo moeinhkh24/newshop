@@ -1,0 +1,47 @@
+{% load static %}
+<!doctype html>
+<html  class="no-js">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>ShoppingYar</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Favicons -->
+    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon"> <!-- اصلاح شده -->
+    <link rel="apple-touch-icon" href="{% static 'assets/img/icon.png' %}"> <!-- اصلاح شده -->
+
+    <!-- ************************* CSS Files ************************* -->
+
+    <link rel="stylesheet" href="{% static 'css/_base.css' %}"> <!-- اصلاح شده -->
+
+    <!-- Vendor CSS -->
+    <link rel="stylesheet" href="{% static 'css/vendor.css' %}"> <!-- اصلاح شده -->
+
+    <!-- style css -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}"> <!-- اصلاح شده -->
+
+
+</head>
+
+<body {% block bodytag %} {% endblock bodytag %}>
+
+{% include "inc/_nav.html" %}
+{% block content %}
+
+{% endblock content %}
+{% include "inc/_footer.html" %}
+
+
+
+    <!-- ************************* JS Files ************************* -->
+
+    <!-- jQuery JS -->
+    <script src="{% static 'js/vendor.js' %}"></script>
+
+    <!-- Main JS -->
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+
+</html>
