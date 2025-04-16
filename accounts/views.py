@@ -62,4 +62,3 @@ class VerifyOtpCodeView(View):
     
 
 
-#hjfdgvrtfgvbuujt #پرسپولیس
