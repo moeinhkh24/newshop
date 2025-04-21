@@ -4,7 +4,6 @@
     
     {% block content %}
     
-    
     <!-- Preloader Start -->
     <div class="ShoppingYar-preloader active">
         <div class="ShoppingYar-preloader-inner h-100 d-flex align-items-center justify-content-center">
@@ -99,7 +98,10 @@
                             <div class="tab-content" id="product-tab-content">
                                 <div class="tab-pane fade show active" id="nav-all">
                                     <div class="row xxl-block-grid-6 grid-space-20">
+                                        {% for product in products %}
+                                        
                                         <div class="col-xl-3 col-md-4 col-sm-6 mb--50">
+                                            {% endfor %}
                                             <div class="ShoppingYar-product">
                                                 <div class="product-inner">
                                                     <figure class="product-image">
@@ -117,10 +119,10 @@
                                                     </figure>
                                                     <div class="product-info">
                                                         <h3 class="product-title h6 mb--15">
-                                                            <a href="product-details.html">پتوی مسافرتی</a>
+                                                            <a href="product-details.html">{{product.title}}</a>
                                                         </h3>
                                                         <div class="product-price-wrapper mb--30">
-                                                            <span class="money text-success">۵۹,۰۰۰ تومان</span>
+                                                            <span class="money text-success">{{product.price}} تومان</span>
                                                             <span class="money-separator">-</span>
                                                             <span class="old-price text-danger">
                                                                 <span class="money text-danger">۸۰,۰۰۰ تومان</span>
@@ -130,8 +132,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-xl-3 col-md-4 col-sm-6 mb--50">
+
+                                        
+
                                             <div class="ShoppingYar-product">
                                                 <div class="product-inner">
                                                     <figure class="product-image">
@@ -157,7 +160,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                         </div>
                                     </div>
                                 </div>
                             </div>
@@ -282,4 +285,3 @@
 
 
 </body>
-
