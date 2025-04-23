@@ -8,6 +8,5 @@ urlpatterns = [
     path('',views.HomeView.as_view(),name='home'),
     path('product/<int:pk>/',views.ProductDetailView.as_view(),name='product_detail'),
     path('comment/<int:pk>/',views.CommentCreateView.as_view(),name='comment_create'),
-    path('cart/',TemplateView.as_view(template_name = 'home/cart.html'),name ='cart')
 ]
 

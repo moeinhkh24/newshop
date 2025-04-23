@@ -137,13 +137,14 @@
                                                     <tr>
                                                         <th>&nbsp;</th>
                                                         <th>عکس محصول</th>
-                                                        <th class="text-left">نام محصول</th>
+                                                        <th class="">نام محصول</th>
                                                         <th>قیمت</th>
                                                         <th>مقدار</th>
                                                         <th>مجموع</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    {% for item in cart %}
                                                     <tr>
                                                         <td class="product-remove text-left"><a href=""><i class="flaticon flaticon-cross"></i></a></td>
                                                         <td class="product-thumbnail text-left">
@@ -151,51 +152,30 @@
                                                         </td>
                                                         <td class="product-name wide-column">
                                                             <h3>
-                                                                <a href="product-details.html">محصول شماره یک</a>
+                                                                <a href="{{ item.product_obj.get_absolute_url }}">محصول شماره یک</a>
                                                             </h3>
                                                         </td>
                                                         <td class="product-price">
                                                             <span class="product-price-wrapper">
-                                                                <span class="money">۱۴۸,۰۰۰ تومان</span>
+                                                                <span class="money">{{ item.product_obj.price }}</span>
                                                             </span>
                                                         </td>
                                                         <td class="product-quantity">
+                                                            <form class="d-flex" action="{% url 'shop:cart_add' item.product_obj.id %}" method="post">
                                                             <div class="quantity">
-                                                                <input type="number" class="quantity-input" name="qty" id="qty-1" value="2" min="1">
+                                                                <input type="number" class="quantity-input" name="qty" id="qty-1" value="{{ item.quantity }}" min="1">
                                                             </div>
+                                                            {{ item.quantity_update_form.inplace }}
+                                                            <input type="submit" value="Add">
+                                                        </form>
                                                         </td>
                                                         <td class="product-total-price">
                                                             <span class="product-price-wrapper">
-                                                                <span class="money">۲۹۶,۰۰۰ تومان</span>
+                                                                <span class="money">{{ item.total_price }}</span>
                                                             </span>
                                                         </td>
                                                     </tr>
-                                                    <tr>
-                                                        <td class="product-remove text-left"><a href=""><i class="flaticon flaticon-cross"></i></a></td>
-                                                        <td class="product-thumbnail text-left">
-                                                            <img src="assets/img/products/prod-10-70x88.jpg" alt="Product Thumnail">
-                                                        </td>
-                                                        <td class="product-name wide-column">
-                                                            <h3>
-                                                                <a href="product-details.html">محصول شماره دو</a>
-                                                            </h3>
-                                                        </td>
-                                                        <td class="product-price">
-                                                            <span class="product-price-wrapper">
-                                                                <span class="money">۵۰,۰۰۰ تومان</span>
-                                                            </span>
-                                                        </td>
-                                                        <td class="product-quantity">
-                                                            <div class="quantity">
-                                                                <input type="number" class="quantity-input" name="qty" id="qty-1" value="1" min="1">
-                                                            </div>
-                                                        </td>
-                                                        <td class="product-total-price">
-                                                            <span class="product-price-wrapper">
-                                                                <span class="money">۵۰,۰۰۰ تومان</span>
-                                                            </span>
-                                                        </td>
-                                                    </tr>
+                                                    {% endfor %}
                                                 </tbody>
                                             </table>
                                         </div>  
@@ -203,7 +183,7 @@
                                 </div>
                                 <div class="row no-gutters border-top pt--20 mt--20">
                                     <div class="col-sm-6 text-sm-right">
-                                        <button type="submit" class="cart-form__btn">خالی کردن سبد خرید</button>
+                                        <button type="submit" class="cart-form__btn"> <a href='{% url "shop:cart_clear" %}'>خالی کردن سبد خرید</button>
                                     </div>
                                 </div>
                             </form>
