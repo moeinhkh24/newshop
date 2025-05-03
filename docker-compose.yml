@@ -2,7 +2,8 @@ version: "3.9"
 
 services:
   db:
-    image: postgres:15
+    image: postgres:17.4
+    container_name: newshop-db
     restart: always
     environment:
       POSTGRES_DB: ${POSTGRES_NAME}
@@ -12,24 +13,32 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   web:
+    container_name: newshop-web
     build:
       context: .
       dockerfile: Dockerfile
     command: >
-      sh -c "until pg_isready -h ${POSTGRES_HOST} -p ${POSTGRES_PORT}; do sleep 1; done &&
-             python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
+      sh -c "
+      until pg_isready -h ${POSTGRES_HOST} -p ${POSTGRES_PORT}; do sleep 1; done &&
+      python manage.py migrate &&
+      python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app
     ports:
       - "8000:8000"
     environment:
-      - POSTGRES_HOST=${POSTGRES_HOST}
-      - POSTGRES_PORT=${POSTGRES_PORT}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_PORT: ${POSTGRES_PORT}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     env_file:
       - .env
 
