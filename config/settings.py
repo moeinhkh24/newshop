@@ -100,14 +100,13 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('POSTGRES_NAME', default='classshop'),
+        'NAME': env('POSTGRES_NAME', default='newshop'),
         'USER': env('POSTGRES_USER', default='postgres'),
         'PASSWORD': env('POSTGRES_PASSWORD', default='123'),
-        'HOST': env('POSTGRES_HOST', default='localhost'),
+        'HOST': env('POSTGRES_HOST', default='db'),
         'PORT': env('POSTGRES_PORT', default='5432'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
