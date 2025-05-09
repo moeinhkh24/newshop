@@ -1,16 +1,36 @@
-version: "3.9"
+version: '3.9'
 
 services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - DEBUG=${DEBUG}
+      - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}
+      - POSTGRES_NAME=${POSTGRES_NAME}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      - db
+      - redis
+
   db:
     image: postgres:17.4
-    container_name: newshop-db
-    restart: always
-    environment:
-      POSTGRES_DB: ${POSTGRES_NAME}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    container_name: db
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${POSTGRES_NAME}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     healthcheck:
@@ -19,28 +39,20 @@ services:
       timeout: 5s
       retries: 5
 
-  web:
-    container_name: newshop-web
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: >
-      sh -c "
-      until pg_isready -h ${POSTGRES_HOST} -p ${POSTGRES_PORT}; do sleep 1; done &&
-      python manage.py migrate &&
-      python manage.py runserver 0.0.0.0:8000"
-    volumes:
-      - .:/app
+  redis:
+    container_name: redis
+    image: redis/redis-stack:latest
     ports:
-      - "8000:8000"
-    environment:
-      POSTGRES_HOST: ${POSTGRES_HOST}
-      POSTGRES_PORT: ${POSTGRES_PORT}
-    depends_on:
-      db:
-        condition: service_healthy
-    env_file:
-      - .env
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:
+  redis_data:

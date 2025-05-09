@@ -1,29 +1,28 @@
-FROM python:3.13.1
+# Use Python 3.11 as the base image
+FROM python:3.13.1-slim
 
-# جلوگیری از ساخت فایل‌های .pyc و نمایش خروجی بلادرنگ
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-# نصب PostgreSQL client
-RUN apt-get update && apt-get install -y postgresql-client
-
-# Set working directory
+# Set work directory
 WORKDIR /app
 
-# Copy requirements and install
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
 COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install dependencies
-RUN pip install --upgrade pip && pip install -r requirements.txt
-
-# Copy all project files
+# Copy project files
 COPY . .
 
-# Set environment variable for Django settings
-ENV DJANGO_SETTINGS_MODULE=config.settings
-
-# Expose port
+# Expose port 8000
 EXPOSE 8000
 
-# Command will be overridden by docker-compose.yaml
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Command to run the application
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"] 
