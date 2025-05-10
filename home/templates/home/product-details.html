@@ -93,7 +93,7 @@
                 <div class="container">
                     <div class="row no-gutters mb--80">
                         <div class="col-12 col-sm-4 product-main-image d-flex align-content-center">
-                            <img class="m-auto" style="max-height: 400px;" src="{{ product.image }}" alt="">
+                            <img class="m-auto" style="max-height: 400px;" src="{{ product.image.url }}" alt="">
                         </div>
                         <div class="col-12 col-sm-8 product-main-details mt-md--50">
                             <div class="product-summary pl-lg--30 pl-md--0 text-right p-4">
@@ -109,12 +109,11 @@
                                 <div class="product-action d-flex align-items-sm-center align-content-center mb--30">
                                     <div class="quantity-wrapper d-flex justify-content-start">
                                         <div class="quantity">
-                                            <input type="number" class="quantity-input" name="qty" id="qty" value="1" min="1">
-                                        </div>
-                                    </div>
-                                    <button type="button" class="btn btn-small btn-bg-red btn-color-white btn-hover-2" onclick="window.location.href='cart.html'">
-                                        اضافه به سبد خرید
-                                    </button>
+                                            <form action="{% url "shop:cart_add" product.id%}" method="post">
+                                                {% csrf_token %}
+                                                {{ add_cart_form.as_p }}
+                                            <input type="submit" value="add to cart">
+                                        </form>
                                 </div>
                                 <div class="product-footer-meta mt-5 pt-5">
                                     <p><span class="m-0">دسته بندی ها:</span>
@@ -175,7 +174,7 @@
                                     </div>
                                     <div class="tab-pane fade" id="nav-reviews" role="tabpanel" aria-labelledby="nav-reviews-tab">
                                         <div class="product-reviews">
-                                            <h3 class="review__title">Comments:{{ product.comments|only_active_comments_count }}</h3>
+                                            <h3 class="review__title">Comments : {{ product.comments|only_active_comments_count }}</h3>
                                             <ul class="review__list">
                                                 {% for comment in product.comments.all|only_active_comments %}
                                                 <li class="review__item">
@@ -191,7 +190,7 @@
                                                                     </div>
                                                                     <div class="product-rating">
                                                                         <div class="m-0 star-rating star-five">
-                                                                            <span>Rated <strong class="rating">{{ comment.sta }}</strong> out of 5</span>
+                                                                            <span>Rated <strong class="rating">{{ comment.stars }}</strong> out of 5</span>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -203,6 +202,7 @@
                                                     </div>
                                                 </li>
                                                 {% endfor %}
+
                                             </ul>
                                             <div class="review-form-wrapper">
                                                 <div class="row">
@@ -210,10 +210,10 @@
                                                     <div class="col-lg-8 m-auto">
                                                         <span class="reply-title pull-right">نظر خود را بنویسید</span>
                                                         <br>
-                                                        <form action="{% url 'home:comment_create' product.id %}" class="form text-right" method='post'>
-                                                           {% csrf_token %}
-                                                           {{ form.as_p }}
-                                                           <input type="submit" value="Create">
+                                                        <form action="{% url "home:comment_create" product.id%}" class="form text-right" method='post'>
+                                                             {% csrf_token %}
+                                                             {{ form.as_p }}
+                                                             <input type="submit" value="Crete">
                                                         </form>
                                                     </div>
                                                 </div>
@@ -244,80 +244,7 @@
         <!-- Search form Popup End -->
 
         <!-- Mini Cart Start -->
-        <aside class="mini-cart" id="miniCart">
-            <div class="mini-cart-wrapper">
-                <a href="" class="btn-close"><i class="flaticon flaticon-cross"></i></a>
-                <div class="mini-cart-inner">
-                    <h3 class="mini-cart__heading mb--40 mb-lg--30 text-right">سبد خرید</h3>
-                    <div class="mini-cart__content">
-                        <ul class="mini-cart__list text-right">
-                            <li class="mini-cart__product d-flex justify-content-between">
-                                <div class="mini-cart__product__image">
-                                    <a href="#">
-                                        <img src="assets/img/products/prod-1-100x100.jpg" alt="products">
-                                    </a>
-                                </div>
-                                <div class="mini-cart__product__content pt-2">
-                                    <span class="mini-cart__product__title d-flex flex-row justify-content-between">
-                                        <a href="#"> محصول سماره یک </a>
-                                        <a href="#" class="">
-                                            &#10060;
-                                        </a>
-                                    </span>
-                                    <span class="mini-cart__product__quantity">
-                                        <span>۴۹,۰۰۰ تومان</span> &#215; <span>۱</span>
-                                    </span>
-                                </div>
-                            </li>
-                            <li class="mini-cart__product d-flex justify-content-between">
-                                <div class="mini-cart__product__image">
-                                    <a href="#">
-                                        <img src="assets/img/products/prod-1-100x100.jpg" alt="products">
-                                    </a>
-                                </div>
-                                <div class="mini-cart__product__content pt-2">
-                                    <span class="mini-cart__product__title d-flex flex-row justify-content-between">
-                                        <a href="#"> محصول سماره یک </a>
-                                        <a href="#" class="">
-                                            &#10060;
-                                        </a>
-                                    </span>
-                                    <span class="mini-cart__product__quantity">
-                                        <span>۴۹,۰۰۰ تومان</span> &#215; <span>۱</span>
-                                    </span>
-                                </div>
-                            </li>
-                            <li class="mini-cart__product d-flex justify-content-between">
-                                <div class="mini-cart__product__image">
-                                    <a href="#">
-                                        <img src="assets/img/products/prod-1-100x100.jpg" alt="products">
-                                    </a>
-                                </div>
-                                <div class="mini-cart__product__content pt-2">
-                                    <span class="mini-cart__product__title d-flex flex-row justify-content-between">
-                                        <a href="#"> محصول سماره یک </a>
-                                        <a href="#" class="">
-                                            &#10060;
-                                        </a>
-                                    </span>
-                                    <span class="mini-cart__product__quantity">
-                                        <span>۴۹,۰۰۰ تومان</span> &#215; <span>۱</span>
-                                    </span>
-                                </div>
-                            </li>
-                        </ul>
-                        <div class="mini-cart__total">
-                            <span>جمع کل</span>
-                            <span class="ammount">۱۴۸,۰۰۰ تومان</span>
-                        </div>
-                        <div class="mini-cart__buttons">
-                            <a href="cart.html" class="btn btn-fullwidth btn-bg-sand mb--20">مشاهده سبد خرید</a>
-                            <a href="checkout.html" class="btn btn-fullwidth btn-bg-sand">پرداخت</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </aside>
+
         <!-- Mini Cart End -->
 
         <!-- Global Overlay Start -->
@@ -470,7 +397,8 @@
 
     <!-- Main JS -->
     <script src="assets/js/main.js"></script>
+    {% endblock content %}
 
 </body>
-{% endblock content %}
+
 </html>

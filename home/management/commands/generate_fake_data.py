@@ -13,8 +13,8 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('--users', type=int, default=5, help='Number of users to create')
-        parser.add_argument('--products', type=int, default=7, help='Number of products to create')
-        parser.add_argument('--comments', type=int, default=100, help='Number of comments to create')
+        parser.add_argument('--products', type=int, default=1, help='Number of products to create')
+        parser.add_argument('--comments', type=int, default=200, help='Number of comments to create')
 
     def handle(self, *args, **options):
         User = get_user_model()

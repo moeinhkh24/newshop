@@ -1,4 +1,5 @@
 from typing import Any
+from django.db.models import Prefetch
 from django.shortcuts import render,get_object_or_404
 from django.views import generic
 from .models import Product,Comment
@@ -12,7 +13,12 @@ class HomeView(generic.ListView):
     paginate_by = 10
 
 class ProductDetailView(generic.DetailView):
-    model = Product
+    queryset = Product.objects.prefetch_related(Prefetch #سوال مصاحبه
+                                                ('comments'
+                                                 ,queryset=Comment.cm_manager.select_related(
+                                                     'author')
+                                                 )
+                                                )
     template_name ='home/product-details.html'
     context_object_name = 'product'
 
