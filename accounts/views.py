@@ -1,7 +1,8 @@
 import random
 from django.shortcuts import render,redirect
 from django.views import View
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login, authenticate,logout
+from django.http import HttpResponseNotAllowed
 from .forms import OtpForm,UserRegisterForm,UserLoginForm
 from .models import OtpCode,User
 
@@ -60,5 +61,31 @@ class VerifyOtpCodeView(View):
             return render(request,self.temp,{'form':form})
         return render(request,self.temp,{'form':form})
     
+class UserLoginView(View):
+    form_class = UserLoginForm
+    template_name = 'accounts/login.html'
+    
+    def get(self, request):
+        form = self.form_class()
+        return render(request, self.template_name, {'form':form})
+    
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(phone_number=cd['phone_number'], password=cd['password'])
+            if user is not None:
+                login(request, user)
+                return redirect('home:home')
+            return render(request, self.template_name, {'form':form})
+        return render(request, self.template_name, {'form':form})
 
-
+class UserLogoutView(View):
+    
+    def get(self, request):
+        response = render(request, '405.html')#یعنی پاسخ به درخواست کاربر
+        return HttpResponseNotAllowed(['POST'], response)
+    
+    def post(self, request):
+        logout(request)
+        return redirect('home:home')
