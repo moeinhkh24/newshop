@@ -1,5 +1,4 @@
 from django import forms
-from .models import OtpCode
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model#مدل سفارشی یوزر
 from django.contrib.auth.forms import ReadOnlyPasswordHashField

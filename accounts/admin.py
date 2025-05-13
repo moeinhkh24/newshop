@@ -4,7 +4,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.forms.models import ModelForm
 from django.http import HttpRequest
 from .forms import UserCreateForm, UserChangeForm
-from .models import User, OtpCode
+from .models import User
 
 
 @admin.register(User)
@@ -34,9 +34,5 @@ class UserAdmin(BaseUserAdmin):
             return self.readonly_fields + ('is_superuser','is_admin')
         return self.readonly_fields
 
-@admin.register(OtpCode)
-class OtpCodeAdmin(admin.ModelAdmin):
-    fields = ('code', 'phone')
-    list_display = ('code', 'phone', 'created')
-    readonly_fields = ('created',)
+
 

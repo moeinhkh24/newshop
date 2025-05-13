@@ -26,10 +26,3 @@ class User(PermissionsMixin,AbstractBaseUser):
     def is_staff(self):
         return self.is_admin
     
-class OtpCode(models.Model):
-    phone = models.CharField(max_length=11, validators=[valid_phone_number],unique=True)
-    code = models.PositiveIntegerField()
-    created = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f'{self.code}'
